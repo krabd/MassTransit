@@ -27,7 +27,7 @@ public class Startup
         var assembly = AppDomain.CurrentDomain.Load("MassTransit.Consumer");
         var serviceName = "masstransit-consumer";
         services.AddMediatR(assembly);
-        services.AddMassTransitConsumer(Configuration, serviceName, new []{typeof(CreateMessageCommand), typeof(UpdateMessageCommand)}, Array.Empty<Type>(), new []{typeof(GetMessageQueryConsumer)});
+        services.AddMassTransitConsumer(Configuration, serviceName, new []{typeof(CreateMessageCommand), typeof(UpdateMessageCommand)}, Array.Empty<Type>(), new []{typeof(GetMessageQuery)});
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

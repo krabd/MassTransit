@@ -53,9 +53,10 @@ public static class MassTransitServiceCollectionExtensions
                 busConfig.AddConsumer(consumer);
             }
 
-            foreach (var respondMessageType in respondMessageTypes)
+            var respondConsumers = respondMessageTypes.Select(i => typeof(RespondConsumerWrapper<>).MakeGenericType(i)).ToList();
+            foreach (var respondConsumer in respondConsumers)
             {
-                busConfig.AddConsumer(respondMessageType);
+                busConfig.AddConsumer(respondConsumer);
             }
 
             busConfig.UsingRabbitMq((context, rabbitConfig) =>
@@ -66,16 +67,11 @@ public static class MassTransitServiceCollectionExtensions
                     rabbitHostConfig.Password(rabbitMqOptions.Password);
                 });
 
-                foreach (var consumer in consumers)
+                var allConsumers = consumers.Concat(respondConsumers);
+                foreach (var consumer in allConsumers)
                 {
                     rabbitConfig.ReceiveEndpoint($"{serviceName}-{consumer.GenericTypeArguments.First().Name.ToLowerInvariant()}",
                         c => { c.ConfigureConsumer(context, consumer); });
-                }
-
-                foreach (var respondMessageType in respondMessageTypes)
-                {
-                    rabbitConfig.ReceiveEndpoint($"{serviceName}-{respondMessageType.Name.ToLowerInvariant()}",
-                        c => { c.ConfigureConsumer(context, respondMessageType); });
                 }
             });
 
