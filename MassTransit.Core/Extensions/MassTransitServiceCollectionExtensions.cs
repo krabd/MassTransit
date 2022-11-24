@@ -1,4 +1,5 @@
-﻿using MassTransit.Core.Interfaces;
+﻿using System.Reflection;
+using MassTransit.Core.Interfaces;
 using MassTransit.Core.Models.Options;
 using MassTransit.Core.Services;
 using Microsoft.Extensions.Configuration;
@@ -31,7 +32,7 @@ public static class MassTransitServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddMassTransitConsumer(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddMassTransitConsumer(this IServiceCollection services, IConfiguration configuration, Assembly consumerAssembly, string serviceName)
     {
         var rabbitMqConfiguration = configuration.GetSection(nameof(RabbitMqOptions));
         services.Configure<RabbitMqOptions>(rabbitMqConfiguration);
@@ -39,7 +40,7 @@ public static class MassTransitServiceCollectionExtensions
         var rabbitMqOptions = rabbitMqConfiguration.Get<RabbitMqOptions>();
         services.AddMassTransit(busConfig =>
         {
-            //busConfig.AddConsumer<ConsumerWrapper<CreateMessageCommand>>();
+            busConfig.AddConsumers(consumerAssembly);
             busConfig.UsingRabbitMq((context, rabbitConfig) =>
             {
                 rabbitConfig.Host(rabbitMqOptions.Uri, "/", rabbitHostConfig =>
@@ -48,9 +49,9 @@ public static class MassTransitServiceCollectionExtensions
                     rabbitHostConfig.Password(rabbitMqOptions.Password);
                 });
 
-                // rabbitConfig.ReceiveEndpoint("create-message", c => {
-                //     c.ConfigureConsumer<ConsumerWrapper<CreateMessageCommand>>(context);
-                // });
+                rabbitConfig.ReceiveEndpoint($"{serviceName}-queue", c => {
+                    c.ConfigureConsumers(context);
+                });
             });
         });
 
