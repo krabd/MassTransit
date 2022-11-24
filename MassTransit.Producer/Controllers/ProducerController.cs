@@ -22,7 +22,15 @@ public class ProducerController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> SendCreateMessage(CreateMessageCommand request, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateMessage(CreateMessageCommand request, CancellationToken cancellationToken)
+    {
+        await _producerService.ProduceAsync(request, cancellationToken);
+
+        return Ok();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateMessage(UpdateMessageCommand request, CancellationToken cancellationToken)
     {
         await _producerService.ProduceAsync(request, cancellationToken);
 
