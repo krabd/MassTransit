@@ -1,5 +1,6 @@
-﻿using System.Linq;
-using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using MassTransit.Core.Interfaces;
 using MassTransit.Core.Models.Options;
 using MassTransit.Core.Services;
@@ -33,7 +34,7 @@ public static class MassTransitServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddMassTransitConsumer(this IServiceCollection services, IConfiguration configuration, Assembly consumerAssembly, string serviceName)
+    public static IServiceCollection AddMassTransitConsumer(this IServiceCollection services, IConfiguration configuration, string serviceName, IReadOnlyCollection<Type> consumerMessageTypes)
     {
         var rabbitMqConfiguration = configuration.GetSection(nameof(RabbitMqOptions));
         services.Configure<RabbitMqOptions>(rabbitMqConfiguration);
@@ -41,10 +42,10 @@ public static class MassTransitServiceCollectionExtensions
         var rabbitMqOptions = rabbitMqConfiguration.Get<RabbitMqOptions>();
         services.AddMassTransit(busConfig =>
         {
-            var consumerTypes = consumerAssembly.GetTypes().Where(i => i.IsAssignableTo(typeof(IConsumer))).ToList();
-            foreach (var consumerType in consumerTypes)
+            var consumers = consumerMessageTypes.Select(i => typeof(ConsumerWrapper<>).MakeGenericType(i)).ToList();
+            foreach (var consumer in consumers)
             {
-                busConfig.AddConsumer(consumerType);
+                busConfig.AddConsumer(consumer);
             }
 
             busConfig.UsingRabbitMq((context, rabbitConfig) =>
@@ -55,12 +56,10 @@ public static class MassTransitServiceCollectionExtensions
                     rabbitHostConfig.Password(rabbitMqOptions.Password);
                 });
 
-                foreach (var consumerType in consumerTypes)
+                foreach (var consumer in consumers)
                 {
-                    rabbitConfig.ReceiveEndpoint($"{serviceName}-{consumerType.Name}", c => {
-                        c.ConfigureConsumer(context, consumerType);
-                    });
-                }
+                    rabbitConfig.ReceiveEndpoint($"{serviceName}-{consumer.GenericTypeArguments.First().Name}",
+                        c => { c.ConfigureConsumer(context, consumer); });}
             });
         });
 
