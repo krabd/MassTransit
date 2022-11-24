@@ -17,4 +17,9 @@ public class ProducerService : IProducerService
     {
         return _publishEndpoint.Publish(message, cancellationToken);
     }
+
+    public Task<TResponse> RequestAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken)
+    {
+        throw new System.NotImplementedException();
+    }
 }

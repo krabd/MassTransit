@@ -21,12 +21,20 @@ public class ProducerController : ControllerBase
         _producerService = producerService;
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetMessage([FromQuery]long id, CancellationToken cancellationToken)
+    {
+        var body = await _producerService.RequestAsync<GetMessageQuery, string>(new GetMessageQuery{Id = id}, cancellationToken);
+
+        return Ok(body);
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateMessage(CreateMessageCommand request, CancellationToken cancellationToken)
     {
         await _producerService.ProduceAsync(request, cancellationToken);
 
-        return Ok();
+        return NoContent();
     }
 
     [HttpPost]
@@ -34,6 +42,6 @@ public class ProducerController : ControllerBase
     {
         await _producerService.ProduceAsync(request, cancellationToken);
 
-        return Ok();
+        return NoContent();
     }
 }

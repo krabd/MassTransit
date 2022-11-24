@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Mime;
 using MassTransit.Core.Interfaces;
 using MassTransit.Core.Models.Options;
 using MassTransit.Core.Services;
@@ -58,7 +59,8 @@ public static class MassTransitServiceCollectionExtensions
                 foreach (var consumer in consumers)
                 {
                     rabbitConfig.ReceiveEndpoint($"{serviceName}-{consumer.GenericTypeArguments.First().Name.ToLowerInvariant()}",
-                        c => { c.ConfigureConsumer(context, consumer); });}
+                        c => { c.ConfigureConsumer(context, consumer); });
+                }
             });
         });
 

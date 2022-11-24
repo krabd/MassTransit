@@ -2,9 +2,7 @@
 
 namespace MassTransit.Contract.DTO;
 
-public record UpdateMessageCommand : IRequest<Result>
+public record GetMessageQuery : IRequest<string>
 {
     public long Id { get; set; }
-
-    public string Body { get; set; }
 }
