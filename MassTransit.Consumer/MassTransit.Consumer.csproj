@@ -14,8 +14,4 @@
       <ProjectReference Include="..\MassTransit.Core\MassTransit.Core.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Consumers" />
-    </ItemGroup>
-
 </Project>

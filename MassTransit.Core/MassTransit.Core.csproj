@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MassTransit.Contract\MassTransit.Contract.csproj" />
+      <ProjectReference Include="..\MassTransit.Mediator\MassTransit.Mediator.csproj" />
     </ItemGroup>
 
 </Project>

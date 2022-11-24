@@ -8,6 +8,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.Core", "MassTra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.Contract", "MassTransit.Contract\MassTransit.Contract.csproj", "{6EBE055A-9D85-43D6-BF77-06610FC791A3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{3C936CFA-F1A2-4654-B37D-3A98EF130CED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.Mediator", "MassTransit.Mediator\MassTransit.Mediator.csproj", "{7F3B3E67-3535-448D-AA4D-FEF0CF38909F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,14 @@ Global
 		{6EBE055A-9D85-43D6-BF77-06610FC791A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EBE055A-9D85-43D6-BF77-06610FC791A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EBE055A-9D85-43D6-BF77-06610FC791A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F3B3E67-3535-448D-AA4D-FEF0CF38909F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F3B3E67-3535-448D-AA4D-FEF0CF38909F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F3B3E67-3535-448D-AA4D-FEF0CF38909F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F3B3E67-3535-448D-AA4D-FEF0CF38909F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6EBE055A-9D85-43D6-BF77-06610FC791A3} = {3C936CFA-F1A2-4654-B37D-3A98EF130CED}
+		{E9F5A695-B73E-4691-A762-C3A8160C0E14} = {3C936CFA-F1A2-4654-B37D-3A98EF130CED}
+		{7F3B3E67-3535-448D-AA4D-FEF0CF38909F} = {3C936CFA-F1A2-4654-B37D-3A98EF130CED}
 	EndGlobalSection
 EndGlobal

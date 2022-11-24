@@ -1,6 +1,8 @@
-﻿namespace MassTransit.Contract.DTO;
+﻿using MediatR;
 
-public record CreateMessageCommand
+namespace MassTransit.Contract.DTO;
+
+public record CreateMessageCommand : IRequest<Result>
 {
     public long Id { get; set; }
 

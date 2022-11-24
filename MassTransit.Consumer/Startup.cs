@@ -1,4 +1,6 @@
-﻿using MassTransit.Core.Extensions;
+﻿using System;
+using MassTransit.Core.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +23,8 @@ public class Startup
     {
         services.AddControllers();
 
+        var assembly = AppDomain.CurrentDomain.Load("MassTransit.Consumer");
+        services.AddMediatR(assembly);
         services.AddMassTransitConsumer(Configuration);
     }
 

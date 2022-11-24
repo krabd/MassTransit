@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using MassTransit.Core.Interfaces;
+﻿using MassTransit.Core.Interfaces;
 using MassTransit.Core.Models.Options;
 using MassTransit.Core.Services;
 using Microsoft.Extensions.Configuration;
@@ -40,7 +39,7 @@ public static class MassTransitServiceCollectionExtensions
         var rabbitMqOptions = rabbitMqConfiguration.Get<RabbitMqOptions>();
         services.AddMassTransit(busConfig =>
         {
-            busConfig.AddConsumer<CreateMessageCommandConsumer>();
+            //busConfig.AddConsumer<ConsumerWrapper<CreateMessageCommand>>();
             busConfig.UsingRabbitMq((context, rabbitConfig) =>
             {
                 rabbitConfig.Host(rabbitMqOptions.Uri, "/", rabbitHostConfig =>
@@ -49,9 +48,9 @@ public static class MassTransitServiceCollectionExtensions
                     rabbitHostConfig.Password(rabbitMqOptions.Password);
                 });
 
-                rabbitConfig.ReceiveEndpoint("create-message", c => {
-                    c.ConfigureConsumer<CreateMessageCommandConsumer>(context);
-                });
+                // rabbitConfig.ReceiveEndpoint("create-message", c => {
+                //     c.ConfigureConsumer<ConsumerWrapper<CreateMessageCommand>>(context);
+                // });
             });
         });
 
