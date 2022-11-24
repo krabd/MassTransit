@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Net.Mime;
 using MassTransit.Core.Interfaces;
 using MassTransit.Core.Models.Options;
 using MassTransit.Core.Services;
@@ -11,7 +10,7 @@ namespace MassTransit.Core.Extensions;
 
 public static class MassTransitServiceCollectionExtensions
 {
-    public static IServiceCollection AddMassTransit(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddMassTransit(this IServiceCollection services, IConfiguration configuration, params Type[] requestMessageTypes)
     {
         var rabbitMqConfiguration = configuration.GetSection(nameof(RabbitMqOptions));
         services.Configure<RabbitMqOptions>(rabbitMqConfiguration);
@@ -27,6 +26,11 @@ public static class MassTransitServiceCollectionExtensions
                     rabbitHostConfig.Password(rabbitMqOptions.Password);
                 });
             });
+
+            foreach (var respondMessageType in requestMessageTypes)
+            {
+                busConfig.AddRequestClient(respondMessageType);
+            }
         });
 
         services.AddScoped<IProducerService, ProducerService>();

@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using MassTransit.Contract;
 using MassTransit.Contract.DTO;
 using MassTransit.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,7 @@ public class ProducerController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetMessage([FromQuery]long id, CancellationToken cancellationToken)
     {
-        var body = await _producerService.RequestAsync<GetMessageQuery, string>(new GetMessageQuery{Id = id}, cancellationToken);
+        var body = await _producerService.RequestAsync<GetMessageQuery, Result<string>>(new GetMessageQuery{Id = id}, cancellationToken);
 
         return Ok(body);
     }

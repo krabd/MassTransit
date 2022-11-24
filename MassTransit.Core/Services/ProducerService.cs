@@ -7,10 +7,12 @@ namespace MassTransit.Core.Services;
 public class ProducerService : IProducerService
 {
     private readonly IPublishEndpoint _publishEndpoint;
+    private readonly IClientFactory _clientFactory;
 
-    public ProducerService(IPublishEndpoint publishEndpoint)
+    public ProducerService(IPublishEndpoint publishEndpoint, IClientFactory clientFactory)
     {
         _publishEndpoint = publishEndpoint;
+        _clientFactory = clientFactory;
     }
 
     public Task ProduceAsync<T>(T message, CancellationToken cancellationToken)
@@ -18,8 +20,13 @@ public class ProducerService : IProducerService
         return _publishEndpoint.Publish(message, cancellationToken);
     }
 
-    public Task<TResponse> RequestAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken)
+    public async Task<TResponse> RequestAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken)
+        where TRequest : class
+        where TResponse : class
     {
-        throw new System.NotImplementedException();
+        var requestClient = _clientFactory.CreateRequestClient<TRequest>();
+        var response = await requestClient.GetResponse<TResponse>(request, cancellationToken);
+
+        return response.Message;
     }
 }

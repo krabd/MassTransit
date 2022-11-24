@@ -1,4 +1,5 @@
-﻿using MassTransit.Core.Extensions;
+﻿using MassTransit.Contract.DTO;
+using MassTransit.Core.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +23,7 @@ public class Startup
         services.AddControllers();
         services.AddSwaggerGen();
 
-        services.AddMassTransit(Configuration);
+        services.AddMassTransit(Configuration, typeof(GetMessageQuery));
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
