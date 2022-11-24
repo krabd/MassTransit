@@ -27,18 +27,19 @@ public static class MassTransitServiceCollectionExtensions
                 });
             });
 
-            foreach (var respondMessageType in requestMessageTypes)
+            foreach (var requestMessageType in requestMessageTypes)
             {
-                busConfig.AddRequestClient(respondMessageType);
+                busConfig.AddRequestClient(requestMessageType);
             }
         });
 
         services.AddScoped<IProducerService, ProducerService>();
+        services.AddMassTransitHostedService();
 
         return services;
     }
 
-    public static IServiceCollection AddMassTransitConsumer(this IServiceCollection services, IConfiguration configuration, string serviceName, params Type[] consumerMessageTypes)
+    public static IServiceCollection AddMassTransitConsumer(this IServiceCollection services, IConfiguration configuration, string serviceName, Type[] consumerMessageTypes, Type[] requestMessageTypes, Type[] respondMessageTypes)
     {
         var rabbitMqConfiguration = configuration.GetSection(nameof(RabbitMqOptions));
         services.Configure<RabbitMqOptions>(rabbitMqConfiguration);
@@ -50,6 +51,11 @@ public static class MassTransitServiceCollectionExtensions
             foreach (var consumer in consumers)
             {
                 busConfig.AddConsumer(consumer);
+            }
+
+            foreach (var respondMessageType in respondMessageTypes)
+            {
+                busConfig.AddConsumer(respondMessageType);
             }
 
             busConfig.UsingRabbitMq((context, rabbitConfig) =>
@@ -65,7 +71,18 @@ public static class MassTransitServiceCollectionExtensions
                     rabbitConfig.ReceiveEndpoint($"{serviceName}-{consumer.GenericTypeArguments.First().Name.ToLowerInvariant()}",
                         c => { c.ConfigureConsumer(context, consumer); });
                 }
+
+                foreach (var respondMessageType in respondMessageTypes)
+                {
+                    rabbitConfig.ReceiveEndpoint($"{serviceName}-{respondMessageType.Name.ToLowerInvariant()}",
+                        c => { c.ConfigureConsumer(context, respondMessageType); });
+                }
             });
+
+            foreach (var respondMessageType in requestMessageTypes)
+            {
+                busConfig.AddRequestClient(respondMessageType);
+            }
         });
 
         services.AddScoped<IProducerService, ProducerService>();
