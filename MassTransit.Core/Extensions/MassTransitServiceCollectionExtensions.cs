@@ -58,7 +58,7 @@ public static class MassTransitServiceCollectionExtensions
 
                 foreach (var consumer in consumers)
                 {
-                    rabbitConfig.ReceiveEndpoint($"{serviceName}-{consumer.GenericTypeArguments.First().Name}",
+                    rabbitConfig.ReceiveEndpoint($"{serviceName}-{consumer.GenericTypeArguments.First().Name.ToLowerInvariant()}",
                         c => { c.ConfigureConsumer(context, consumer); });}
             });
         });
