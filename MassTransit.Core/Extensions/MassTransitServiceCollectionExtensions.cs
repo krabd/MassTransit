@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using MassTransit.Core.Interfaces;
 using MassTransit.Core.Models.Options;
@@ -34,7 +33,7 @@ public static class MassTransitServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddMassTransitConsumer(this IServiceCollection services, IConfiguration configuration, string serviceName, IReadOnlyCollection<Type> consumerMessageTypes)
+    public static IServiceCollection AddMassTransitConsumer(this IServiceCollection services, IConfiguration configuration, string serviceName, params Type[] consumerMessageTypes)
     {
         var rabbitMqConfiguration = configuration.GetSection(nameof(RabbitMqOptions));
         services.Configure<RabbitMqOptions>(rabbitMqConfiguration);
