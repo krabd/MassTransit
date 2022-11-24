@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Linq;
+using System.Reflection;
 using MassTransit.Core.Interfaces;
 using MassTransit.Core.Models.Options;
 using MassTransit.Core.Services;
@@ -40,7 +41,12 @@ public static class MassTransitServiceCollectionExtensions
         var rabbitMqOptions = rabbitMqConfiguration.Get<RabbitMqOptions>();
         services.AddMassTransit(busConfig =>
         {
-            busConfig.AddConsumers(consumerAssembly);
+            var consumerTypes = consumerAssembly.GetTypes().Where(i => i.IsAssignableTo(typeof(IConsumer))).ToList();
+            foreach (var consumerType in consumerTypes)
+            {
+                busConfig.AddConsumer(consumerType);
+            }
+
             busConfig.UsingRabbitMq((context, rabbitConfig) =>
             {
                 rabbitConfig.Host(rabbitMqOptions.Uri, "/", rabbitHostConfig =>
@@ -49,9 +55,12 @@ public static class MassTransitServiceCollectionExtensions
                     rabbitHostConfig.Password(rabbitMqOptions.Password);
                 });
 
-                rabbitConfig.ReceiveEndpoint($"{serviceName}-queue", c => {
-                    c.ConfigureConsumers(context);
-                });
+                foreach (var consumerType in consumerTypes)
+                {
+                    rabbitConfig.ReceiveEndpoint($"{serviceName}-{consumerType.Name}", c => {
+                        c.ConfigureConsumer(context, consumerType);
+                    });
+                }
             });
         });
 
