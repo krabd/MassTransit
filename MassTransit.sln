@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.Consumer", "MassTransit.Consumer\MassTransit.Consumer.csproj", "{5408A074-9CE6-455C-B13F-476096F6A0D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.Producer", "MassTransit.Producer\MassTransit.Producer.csproj", "{030732F7-8711-44ED-8253-1D6F89819439}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5408A074-9CE6-455C-B13F-476096F6A0D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5408A074-9CE6-455C-B13F-476096F6A0D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5408A074-9CE6-455C-B13F-476096F6A0D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5408A074-9CE6-455C-B13F-476096F6A0D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{030732F7-8711-44ED-8253-1D6F89819439}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{030732F7-8711-44ED-8253-1D6F89819439}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{030732F7-8711-44ED-8253-1D6F89819439}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{030732F7-8711-44ED-8253-1D6F89819439}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
