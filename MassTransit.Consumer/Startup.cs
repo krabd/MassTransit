@@ -1,4 +1,5 @@
 ﻿using MassTransit.Consumer.BackgroundServices;
+using MassTransit.Core.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +23,7 @@ public class Startup
         services.AddControllers();
         services.AddHostedService<ConsumerBackgroundService>();
 
-        //services.AddMassTransit(Configuration);
+        services.AddMassTransit(Configuration);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
