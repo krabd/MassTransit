@@ -1,4 +1,9 @@
-﻿using MassTransit.Producer.BackgroundServices;
+﻿using MassTransit.Core.Extensions;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace MassTransit.Producer;
 
@@ -15,7 +20,9 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
-        services.AddHostedService<ProducerBackgroundService>();
+
+        services.AddSwaggerGen();
+        services.AddMassTransit(Configuration);
 
         //services.AddMassTransit(Configuration);
     }
@@ -26,6 +33,11 @@ public class Startup
         if (env.IsDevelopment() || env.IsEnvironment("Testing"))
         {
             app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Producer");
+            });
         }
 
         app.UseHttpsRedirection();
