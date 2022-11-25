@@ -3,7 +3,7 @@ using MediatR;
 
 namespace MassTransit.Core.Services;
 
-internal class RespondConsumerService<T> : IConsumer<T> where T : class
+internal sealed class RespondConsumerService<T> : IConsumer<T> where T : class
 {
     private readonly IMediator _mediator;
 
@@ -12,7 +12,7 @@ internal class RespondConsumerService<T> : IConsumer<T> where T : class
         _mediator = mediator;
     }
 
-    public virtual async Task Consume(ConsumeContext<T> context)
+    public async Task Consume(ConsumeContext<T> context)
     {
         var result = await _mediator.Send(context.Message);
         await context.RespondAsync(result);

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace MassTransit.Core.Services;
 
-internal class ConsumerService<T> : IConsumer<T> where T : class
+internal sealed class ConsumerService<T> : IConsumer<T> where T : class
 {
     private readonly IMediator _mediator;
 
@@ -12,7 +12,7 @@ internal class ConsumerService<T> : IConsumer<T> where T : class
         _mediator = mediator;
     }
 
-    public virtual Task Consume(ConsumeContext<T> context)
+    public Task Consume(ConsumeContext<T> context)
     {
         return _mediator.Send(context.Message);
     }
