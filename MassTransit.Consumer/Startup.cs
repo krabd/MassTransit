@@ -27,11 +27,11 @@ public class Startup
         var assembly = AppDomain.CurrentDomain.Load("MassTransit.Consumer");
         services.AddMediatR(assembly);
 
-        services.AddMassTransit(Configuration, "masstransit-consumer")
+        MassTransitServiceCollectionExtensions.AddMassTransit(services)
                 .AddConsumer<CreateMessageCommand>()
                 .AddConsumer<UpdateMessageCommand>()
                 .AddRespondConsumer<GetMessageQuery>()
-                .Build();
+                .Build(Configuration, "masstransit-consumer");
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

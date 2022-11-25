@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MassTransit.Core.Interfaces;
 
@@ -10,5 +11,5 @@ public interface IConsumerBuilder
 
     IConsumerBuilder AddRequestClient<T>();
 
-    IServiceCollection Build();
+    IServiceCollection Build(IConfiguration configuration, string serviceName);
 }

@@ -16,14 +16,10 @@ internal class ConsumerBuilder : IConsumerBuilder
     private readonly List<Type> _requestMessageTypes = new();
 
     private readonly IServiceCollection _services;
-    private readonly IConfiguration _configuration;
-    private readonly string _serviceName;
 
-    public ConsumerBuilder(IServiceCollection services, IConfiguration configuration, string serviceName)
+    public ConsumerBuilder(IServiceCollection services)
     {
         _services = services;
-        _configuration = configuration;
-        _serviceName = serviceName;
     }
 
     public IConsumerBuilder AddConsumer<T>()
@@ -47,9 +43,9 @@ internal class ConsumerBuilder : IConsumerBuilder
         return this;
     }
 
-    public IServiceCollection Build()
+    public IServiceCollection Build(IConfiguration configuration, string serviceName)
     {
-        var rabbitMqConfiguration = _configuration.GetSection(nameof(RabbitMqOptions));
+        var rabbitMqConfiguration = configuration.GetSection(nameof(RabbitMqOptions));
         _services.Configure<RabbitMqOptions>(rabbitMqConfiguration);
 
         var rabbitMqOptions = rabbitMqConfiguration.Get<RabbitMqOptions>();
@@ -78,7 +74,7 @@ internal class ConsumerBuilder : IConsumerBuilder
                 var allConsumers = consumers.Concat(respondConsumers);
                 foreach (var consumer in allConsumers)
                 {
-                    rabbitConfig.ReceiveEndpoint($"{_serviceName}-{consumer.GenericTypeArguments.First().Name.ToLowerInvariant()}",
+                    rabbitConfig.ReceiveEndpoint($"{serviceName}-{consumer.GenericTypeArguments.First().Name.ToLowerInvariant()}",
                         c => { c.ConfigureConsumer(context, consumer); });
                 }
             });
