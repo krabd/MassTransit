@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 
-namespace MassTransit.Core;
+namespace MassTransit.Core.Services;
 
-public class ConsumerWrapper<T> : IConsumer<T> where T : class
+internal class ConsumerService<T> : IConsumer<T> where T : class
 {
     private readonly IMediator _mediator;
 
-    public ConsumerWrapper(IMediator mediator)
+    public ConsumerService(IMediator mediator)
     {
         _mediator = mediator;
     }

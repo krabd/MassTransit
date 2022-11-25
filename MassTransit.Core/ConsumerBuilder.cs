@@ -51,13 +51,13 @@ internal class ConsumerBuilder : IConsumerBuilder
         var rabbitMqOptions = rabbitMqConfiguration.Get<RabbitMqOptions>();
         _services.AddMassTransit(busConfig =>
         {
-            var consumers = _consumerMessageTypes.Select(i => typeof(ConsumerWrapper<>).MakeGenericType(i)).ToList();
+            var consumers = _consumerMessageTypes.Select(i => typeof(ConsumerService<>).MakeGenericType(i)).ToList();
             foreach (var consumer in consumers)
             {
                 busConfig.AddConsumer(consumer);
             }
 
-            var respondConsumers = _respondMessageTypes.Select(i => typeof(RespondConsumerWrapper<>).MakeGenericType(i)).ToList();
+            var respondConsumers = _respondMessageTypes.Select(i => typeof(RespondConsumerService<>).MakeGenericType(i)).ToList();
             foreach (var respondConsumer in respondConsumers)
             {
                 busConfig.AddConsumer(respondConsumer);

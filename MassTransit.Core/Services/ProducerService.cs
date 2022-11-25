@@ -4,7 +4,7 @@ using MassTransit.Core.Interfaces;
 
 namespace MassTransit.Core.Services;
 
-public class ProducerService : IProducerService
+internal class ProducerService : IProducerService
 {
     private readonly IPublishEndpoint _publishEndpoint;
     private readonly IClientFactory _clientFactory;
